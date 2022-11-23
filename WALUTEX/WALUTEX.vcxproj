@@ -128,6 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\update_data.cpp" />
+    <ClCompile Include="source\window_functions.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\main.h" />
+    <ClInclude Include="source\update_data.h" />
+    <ClInclude Include="source\window_functions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

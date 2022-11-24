@@ -1,6 +1,7 @@
-#include "main.h"
+#include <Windows.h>
 
-LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);
+#include "update_data.h"
+#include "procedures.h"
 
 int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR args, _In_ int ncmdshow)
 {
@@ -27,7 +28,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
 		return -1;
 	}
 
-	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE, L"window", L"WALUTEX", WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME, 100, 100, 800, 300, NULL, NULL, hInst, NULL);
+	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE, L"window", L"WALUTEX", WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME, 100, 100, 800, 700, NULL, NULL, hInst, NULL);
 
 	if (hwnd == NULL)
 	{
@@ -44,30 +45,5 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
 		DispatchMessageW(&messages);
 	}
 
-	return 0;
-}
-
-LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT messages, WPARAM wparam, LPARAM lparam)
-{
-	switch (messages)
-	{
-	case WM_CLOSE:
-		DestroyWindow(hwnd);
-		break;
-
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-
-	case WM_CREATE:
-		break;
-
-	case WM_COMMAND:
-		break;
-
-	default:
-		return DefWindowProc(hwnd, messages, wparam, lparam);
-		break;
-	}
 	return 0;
 }

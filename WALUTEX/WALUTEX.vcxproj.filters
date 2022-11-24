@@ -24,6 +24,9 @@
     <ClCompile Include="source\update_data.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="source\procedures.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\window_functions.h">
@@ -32,7 +35,7 @@
     <ClInclude Include="source\update_data.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="source\main.h">
+    <ClInclude Include="source\procedures.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>

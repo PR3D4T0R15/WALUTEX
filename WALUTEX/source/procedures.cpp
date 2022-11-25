@@ -16,6 +16,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT messages, WPARAM wparam, LPARAM
 
 	case WM_CREATE:
 		CreateMainControls(hwnd);
+		CreateListData();
 		break;
 
 	case WM_COMMAND:

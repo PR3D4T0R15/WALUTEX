@@ -28,7 +28,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
 		return -1;
 	}
 
-	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE, L"window", L"WALUTEX", WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME, 100, 100, 800, 700, NULL, NULL, hInst, NULL);
+	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE, L"window", L"WALUTEX", WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME, 100, 100, 600, 700, NULL, NULL, hInst, NULL);
 
 	if (hwnd == NULL)
 	{

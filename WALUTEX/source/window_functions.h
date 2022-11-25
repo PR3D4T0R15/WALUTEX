@@ -11,4 +11,16 @@
 #define converterConvertedCurrencyField 1003
 #define converterConvertButton 1000
 
+//list
+#define listWindow 2000
+
 void CreateMainControls(HWND);
+void CreateListData();
+
+struct currencies
+{
+	double Bid;
+	double Ask;
+	const wchar_t* code;
+	const wchar_t* name;
+};

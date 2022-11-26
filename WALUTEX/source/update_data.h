@@ -6,3 +6,5 @@
 
 //TODO: http request
 //TODO: json parser
+
+int getDataFromServer();

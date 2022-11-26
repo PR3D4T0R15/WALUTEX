@@ -18,6 +18,7 @@
 
 void CreateMainControls(HWND);
 void CreateListData();
+void ChangeFlag();
 
 struct currenciesStruct
 {

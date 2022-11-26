@@ -151,6 +151,7 @@
     <Image Include="source\img\flags\1.bmp" />
     <Image Include="source\img\flags\10.bmp" />
     <Image Include="source\img\flags\11.bmp" />
+    <Image Include="source\img\flags\12.bmp" />
     <Image Include="source\img\flags\2.bmp" />
     <Image Include="source\img\flags\3.bmp" />
     <Image Include="source\img\flags\4.bmp" />

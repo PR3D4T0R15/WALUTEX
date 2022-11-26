@@ -85,6 +85,9 @@
     <Image Include="source\img\icon.ico">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="source\img\flags\12.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

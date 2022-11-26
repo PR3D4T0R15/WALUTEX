@@ -8,12 +8,12 @@
 HMENU hMenu;
 //converter hwnd
 HWND baseCurrency, baseCurrencyAmount, convertedCurrency, convertedCurrencyAmount, convertButton, baseImage, convertedImage;
-HBITMAP flags[12];
+HBITMAP flags[13];
 //currency list
 HWND list;
-const wchar_t* currenciesShort[] = { L"USD", L"AUD", L"CAD", L"EUR", L"HUF", L"CHF", L"GBP", L"JPY", L"CZK", L"DKK", L"NOK", L"SEK" };
-currenciesStruct currenciesData[12];
-LVITEM listItems[12];
+const wchar_t* currenciesShort[13] = { L"USD", L"AUD", L"CAD", L"EUR", L"HUF", L"CHF", L"GBP", L"JPY", L"CZK", L"DKK", L"NOK", L"SEK", L"PLN"};
+currenciesStruct currenciesData[13];
+LVITEM listItems[13];
 
 
 void CreateMainControls(HWND hwnd)
@@ -22,10 +22,14 @@ void CreateMainControls(HWND hwnd)
 	HMENU hMenu1 = CreateMenu();
 	HMENU hMenu2 = CreateMenu();
 
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < 13; i++)
 	{
 		std::wstring link = L"source\\img\\flags\\" + std::to_wstring(i) + L".bmp";
 		flags[i] = (HBITMAP)LoadImage(NULL, (LPCWSTR)link.c_str(), IMAGE_BITMAP, 100, 50, LR_LOADFROMFILE);
+	}
+	if (flags[12] == NULL)
+	{
+		MessageBoxEx(NULL, L"ERROR creating window class", L"MASTER ERROR", MB_ICONERROR, 0);
 	}
 
 	//hmenu setup
@@ -47,7 +51,7 @@ void CreateMainControls(HWND hwnd)
 
 	convertButton = CreateWindowEx(NULL, L"BUTTON", L"PRZELICZ", WS_CHILD | WS_VISIBLE, 190, 160, 200, 30, hwnd, (HMENU)converterConvertButton, NULL, NULL);
 
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < 13; i++)
 	{
 		SendMessage(baseCurrency, CB_ADDSTRING, NULL, (LPARAM)currenciesShort[i]);
 		SendMessage(convertedCurrency, CB_ADDSTRING, NULL, (LPARAM)currenciesShort[i]);
@@ -70,33 +74,25 @@ void CreateMainControls(HWND hwnd)
 
 	columns.iSubItem = 0;
 	columns.cx = 90;
-	columns.pszText = (LPWSTR)L"FLAGA";
-	ListView_InsertColumn(list, 1, &columns);
-
-	columns.iSubItem = 0;
-	columns.cx = 90;
 	columns.pszText = (LPWSTR)L"KOD";
-	ListView_InsertColumn(list, 2, &columns);
+	ListView_InsertColumn(list, 1, &columns);
 
 	columns.iSubItem = 0;
 	columns.cx = 100;
 	columns.pszText = (LPWSTR)L"KUP";
-	ListView_InsertColumn(list, 3, &columns);
+	ListView_InsertColumn(list, 2, &columns);
 
 	columns.iSubItem = 0;
 	columns.cx = 100;
 	columns.pszText = (LPWSTR)L"SPRZEDA¯";
-	ListView_InsertColumn(list, 4, &columns);
+	ListView_InsertColumn(list, 3, &columns);
 }
 
 void CreateListData()
 {
-	const wchar_t* currenciesLong[] = { L"dolar amerykañski", L"dolar australijski", L"dolar kanadyjski", L"euro", L"forint", L"frank szwajcarski", L"funt szterling", L"jen", L"korona czeska", L"korona duñska", L"korona norweska", L"korona szwedzka" };
-	const wchar_t* currenciesFlagNames[] = { L"usd.bmp", L"aud.bmp", L"cad.bmp", L"eur.bmp", L"huf.bmp", L"chf.bmp", L"gbp.bmp", L"jpy.bmp", L"czk.bmp", L"dkk.bmp", L"nok.bmp", L"sek.bmp" };
-	HIMAGELIST himl;
-	HBITMAP hbitmap;
+	const wchar_t* currenciesLong[13] = { L"dolar amerykañski", L"dolar australijski", L"dolar kanadyjski", L"euro", L"forint", L"frank szwajcarski", L"funt szterling", L"jen", L"korona czeska", L"korona duñska", L"korona norweska", L"korona szwedzka", L"z³oty"};
 
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < 13; i++)
 	{
 		currenciesData[i].code = currenciesShort[i];
 		currenciesData[i].name = currenciesLong[i];
@@ -104,29 +100,34 @@ void CreateListData()
 		currenciesData[i].Bid = 0.0;
 	}
 
-	for (int j = 0; j < 12; j++)
+	for (int j = 0; j < 13; j++)
 	{
-		listItems[j].mask = LVIF_TEXT | LVIF_IMAGE;
+		listItems[j].mask = LVIF_TEXT;
 
 		listItems[j].pszText = (LPWSTR)currenciesData[j].name;
 		listItems[j].iItem = j;
 		listItems[j].iSubItem = 0;
 		ListView_InsertItem(list, &listItems[j]);
 
-		//himl = ImageList_Create(16, 16, ILC_COLOR32, 1, 1);
-		//hbitmap = (HBITMAP)LoadImage(NULL, L"source\\img\\flags\\0.bmp", IMAGE_BITMAP, 20, 30, LR_LOADFROMFILE);
-		//ImageList_Add(himl, hbitmap, (HBITMAP)NULL);
-		//DeleteObject(hbitmap);
-
-		ListView_SetItemText(list, j, 2, (LPWSTR)currenciesData[j].code);
+		ListView_SetItemText(list, j, 1, (LPWSTR)currenciesData[j].code);
 
 		WCHAR buffer[9];
 		swprintf(buffer, 8, L"%f", currenciesData[j].Bid);
-		ListView_SetItemText(list, j, 3, (LPWSTR)buffer);
+		ListView_SetItemText(list, j, 2, (LPWSTR)buffer);
 
 		swprintf(buffer, 8, L"%f", currenciesData[j].Ask);
-		ListView_SetItemText(list, j, 4, (LPWSTR)buffer);
+		ListView_SetItemText(list, j, 3, (LPWSTR)buffer);
 
 	}
 	
+}
+
+void ChangeFlag()
+{
+	int option1 = SendMessage(baseCurrency, CB_GETCURSEL, 0, 0);
+	SendMessage(baseImage, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)flags[option1]);
+	int option2 = SendMessage(convertedCurrency, CB_GETCURSEL, 0, 0);
+	SendMessage(convertedImage, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)flags[option2]);
+
+
 }

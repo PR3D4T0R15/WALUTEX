@@ -2,15 +2,17 @@
 #include <commctrl.h>
 #include <wchar.h>
 #include "window_functions.h"
+#include <string>
 
 //menu hwnd
 HMENU hMenu;
 //converter hwnd
-HWND baseCurrency, baseCurrencyAmount, convertedCurrency, convertedCurrencyAmount, convertButton;
+HWND baseCurrency, baseCurrencyAmount, convertedCurrency, convertedCurrencyAmount, convertButton, baseImage, convertedImage;
+HBITMAP flags[12];
 //currency list
 HWND list;
 const wchar_t* currenciesShort[] = { L"USD", L"AUD", L"CAD", L"EUR", L"HUF", L"CHF", L"GBP", L"JPY", L"CZK", L"DKK", L"NOK", L"SEK" };
-currencies currenciesData[12];
+currenciesStruct currenciesData[12];
 LVITEM listItems[12];
 
 
@@ -19,6 +21,12 @@ void CreateMainControls(HWND hwnd)
 	hMenu = CreateMenu();
 	HMENU hMenu1 = CreateMenu();
 	HMENU hMenu2 = CreateMenu();
+
+	for (int i = 0; i < 12; i++)
+	{
+		std::wstring link = L"source\\img\\flags\\" + std::to_wstring(i) + L".bmp";
+		flags[i] = (HBITMAP)LoadImage(NULL, (LPCWSTR)link.c_str(), IMAGE_BITMAP, 100, 50, LR_LOADFROMFILE);
+	}
 
 	//hmenu setup
 	AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hMenu1, L"Plik");
@@ -30,11 +38,23 @@ void CreateMainControls(HWND hwnd)
 
 	//converter setup
 	baseCurrency = CreateWindowEx(WS_EX_CLIENTEDGE, L"COMBOBOX", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | CBS_DROPDOWN, 10, 20, 100, 300, hwnd, (HMENU)converterBaseCurrencyCombobox, NULL, NULL);
-	baseCurrencyAmount = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 150, 20, 100, 60, hwnd, (HMENU)converterBaseCurrencyField, NULL, NULL);
-	convertedCurrency = CreateWindowEx(WS_EX_CLIENTEDGE, L"COMBOBOX", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | CBS_DROPDOWN, 260, 20, 100, 300, hwnd, (HMENU)converterConvertedCurrencyCombobox, NULL, NULL);
-	convertedCurrencyAmount = CreateWindowEx(NULL, L"STATIC", L"10 USD = 24.6 PLN", WS_CHILD | WS_VISIBLE, 20, 100, 500, 50, hwnd, (HMENU)converterConvertedCurrencyField, NULL, NULL);
-	convertButton = CreateWindowEx(NULL, L"BUTTON", L"PRZELICZ", WS_CHILD | WS_VISIBLE, 80, 170, 200, 30, hwnd, (HMENU)converterConvertButton, NULL, NULL);
+	baseCurrencyAmount = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 110, 20, 100, 24, hwnd, (HMENU)converterBaseCurrencyField, NULL, NULL);
+	baseImage = CreateWindowEx(NULL, L"STATIC", NULL, WS_VISIBLE | WS_CHILD | SS_BITMAP | WS_BORDER, 10, 60, 100, 50, hwnd, (HMENU)converterBaseFlag, NULL, NULL);
 
+	convertedCurrency = CreateWindowEx(WS_EX_CLIENTEDGE, L"COMBOBOX", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | CBS_DROPDOWN, 370, 20, 100, 300, hwnd, (HMENU)converterConvertedCurrencyCombobox, NULL, NULL);
+	convertedCurrencyAmount = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 470, 20, 100, 24, hwnd, (HMENU)converterConvertedCurrencyField, NULL, NULL);
+	convertedImage = CreateWindowEx(NULL, L"STATIC", NULL, WS_VISIBLE | WS_CHILD | SS_BITMAP | WS_BORDER, 370, 60, 100, 50, hwnd, (HMENU)converterConvertedFlag, NULL, NULL);
+
+	convertButton = CreateWindowEx(NULL, L"BUTTON", L"PRZELICZ", WS_CHILD | WS_VISIBLE, 190, 160, 200, 30, hwnd, (HMENU)converterConvertButton, NULL, NULL);
+
+	for (int i = 0; i < 12; i++)
+	{
+		SendMessage(baseCurrency, CB_ADDSTRING, NULL, (LPARAM)currenciesShort[i]);
+		SendMessage(convertedCurrency, CB_ADDSTRING, NULL, (LPARAM)currenciesShort[i]);
+	}
+	SendMessage(baseCurrency, CB_SETCURSEL, 2, 0);
+	SendMessage(convertedCurrency, CB_SETCURSEL, 2, 0);
+	
 	//currency list
 	RECT rcl;
 	GetClientRect(hwnd, &rcl);
@@ -67,16 +87,14 @@ void CreateMainControls(HWND hwnd)
 	columns.cx = 100;
 	columns.pszText = (LPWSTR)L"SPRZEDA¯";
 	ListView_InsertColumn(list, 4, &columns);
-
-
-
-
-	//TODO:listview do wyswletlania kursow
 }
 
 void CreateListData()
 {
 	const wchar_t* currenciesLong[] = { L"dolar amerykañski", L"dolar australijski", L"dolar kanadyjski", L"euro", L"forint", L"frank szwajcarski", L"funt szterling", L"jen", L"korona czeska", L"korona duñska", L"korona norweska", L"korona szwedzka" };
+	const wchar_t* currenciesFlagNames[] = { L"usd.bmp", L"aud.bmp", L"cad.bmp", L"eur.bmp", L"huf.bmp", L"chf.bmp", L"gbp.bmp", L"jpy.bmp", L"czk.bmp", L"dkk.bmp", L"nok.bmp", L"sek.bmp" };
+	HIMAGELIST himl;
+	HBITMAP hbitmap;
 
 	for (int i = 0; i < 12; i++)
 	{
@@ -95,7 +113,11 @@ void CreateListData()
 		listItems[j].iSubItem = 0;
 		ListView_InsertItem(list, &listItems[j]);
 
-		//ListView_SetItemText(list, j, 1, (LPWSTR)L"test"); - OBRAZEK
+		//himl = ImageList_Create(16, 16, ILC_COLOR32, 1, 1);
+		//hbitmap = (HBITMAP)LoadImage(NULL, L"source\\img\\flags\\0.bmp", IMAGE_BITMAP, 20, 30, LR_LOADFROMFILE);
+		//ImageList_Add(himl, hbitmap, (HBITMAP)NULL);
+		//DeleteObject(hbitmap);
+
 		ListView_SetItemText(list, j, 2, (LPWSTR)currenciesData[j].code);
 
 		WCHAR buffer[9];

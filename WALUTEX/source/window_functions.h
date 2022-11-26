@@ -7,8 +7,10 @@
 
 #define converterBaseCurrencyCombobox 1001
 #define converterBaseCurrencyField 1002
-#define converterConvertedCurrencyCombobox 1003
-#define converterConvertedCurrencyField 1003
+#define converterBaseFlag 1003
+#define converterConvertedCurrencyCombobox 2001
+#define converterConvertedCurrencyField 2002
+#define converterConvertedFlag 2002
 #define converterConvertButton 1000
 
 //list
@@ -17,7 +19,7 @@
 void CreateMainControls(HWND);
 void CreateListData();
 
-struct currencies
+struct currenciesStruct
 {
 	double Bid;
 	double Ask;

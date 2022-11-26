@@ -38,5 +38,57 @@
     <ClInclude Include="source\procedures.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="source\img\flags\0.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\1.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\2.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\3.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\4.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\5.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\6.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\7.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\8.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\9.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\10.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\flags\11.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\logo.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="source\img\icon.ico">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Pliki zasobów</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

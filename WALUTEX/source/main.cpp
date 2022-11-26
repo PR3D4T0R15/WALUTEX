@@ -1,5 +1,5 @@
 #include <Windows.h>
-
+#include "resource.h"
 #include "update_data.h"
 #include "procedures.h"
 
@@ -15,12 +15,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
 	window.cbClsExtra = 0;
 	window.cbWndExtra = 0;
 	window.hInstance = hInst;
-	window.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	window.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_ICON1));
 	window.hCursor = LoadCursor(NULL, IDC_ARROW);
 	window.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);	
 	window.lpszMenuName = NULL;	
 	window.lpszClassName = L"window";
-	window.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+	window.hIconSm = LoadIcon(hInst, MAKEINTRESOURCE(IDI_ICON1));
 
 	if (!RegisterClassEx(&window))
 	{

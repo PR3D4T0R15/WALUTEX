@@ -22,7 +22,7 @@ void CreateMainControls(HWND hwnd)
 	HMENU hMenu1 = CreateMenu();
 	HMENU hMenu2 = CreateMenu();
 
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < 13; i++)
 	{
 		std::wstring link = L"source\\img\\flags\\" + std::to_wstring(i) + L".bmp";
 		flags[i] = (HBITMAP)LoadImage(NULL, (LPCWSTR)link.c_str(), IMAGE_BITMAP, 100, 50, LR_LOADFROMFILE);
@@ -47,7 +47,7 @@ void CreateMainControls(HWND hwnd)
 
 	convertButton = CreateWindowEx(NULL, L"BUTTON", L"PRZELICZ", WS_CHILD | WS_VISIBLE, 190, 160, 200, 30, hwnd, (HMENU)converterConvertButton, NULL, NULL);
 
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < 13; i++)
 	{
 		SendMessage(baseCurrency, CB_ADDSTRING, NULL, (LPARAM)currenciesShort[i]);
 		SendMessage(convertedCurrency, CB_ADDSTRING, NULL, (LPARAM)currenciesShort[i]);
@@ -88,7 +88,7 @@ void CreateListData()
 {
 	const wchar_t* currenciesLong[13] = { L"dolar amerykañski", L"dolar australijski", L"dolar kanadyjski", L"euro", L"forint", L"frank szwajcarski", L"funt szterling", L"jen", L"korona czeska", L"korona duñska", L"korona norweska", L"korona szwedzka", L"z³oty"};
 
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < 13; i++)
 	{
 		currenciesData[i].code = currenciesShort[i];
 		currenciesData[i].name = currenciesLong[i];
@@ -123,7 +123,11 @@ void ChangeFlag()
 	SendMessage(baseImage, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)flags[option1]);
 	int option2 = SendMessage(convertedCurrency, CB_GETCURSEL, 0, 0);
 	SendMessage(convertedImage, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)flags[option2]);
+
+	SetWindowText(baseCurrencyAmount, NULL);
+	SetWindowText(convertedCurrencyAmount, NULL);
 }
+
 
 void UpdateListData()
 {
@@ -138,4 +142,52 @@ void UpdateListData()
 	}
 
 	ListView_RedrawItems(list, 0, 12);
+}
+
+void CalculateCurrency()
+{
+	int optionBase = SendMessage(baseCurrency, CB_GETCURSEL, 0, 0);
+	int optionConverted = SendMessage(convertedCurrency, CB_GETCURSEL, 0, 0);
+	WCHAR buffer[10];
+	GetWindowText(baseCurrencyAmount, buffer, 10);
+	float baseAmount = _wtof(buffer);
+	float out;
+
+	if (optionBase == 12)
+	{
+		out = (int)baseAmount / currenciesData[optionConverted].Bid;
+	}
+	else if (optionConverted == 12)
+	{
+		out = (int)baseAmount * currenciesData[optionBase].Ask;
+	}
+	else
+	{
+		float toPLN = int(currenciesData[optionBase].Ask * baseAmount);
+		out = toPLN / currenciesData[optionConverted].Bid;
+	}
+
+	swprintf(buffer, 10, L"%f", out);
+	SetWindowText(convertedCurrencyAmount, buffer);
+}
+
+void AskForLocation(HWND hwnd)
+{
+	OPENFILENAME ofn;
+	char fileName[100] = "";
+
+	ZeroMemory(&ofn, sizeof(ofn));
+
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hwnd;
+	ofn.lpstrFilter = L"Text Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0";
+	ofn.lpstrFile = (LPWSTR)fileName;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+	ofn.lpstrDefExt = L"txt";
+
+	if (GetSaveFileName(&ofn))
+	{
+		// Do something usefull with the filename stored in szFileName 
+	}
 }

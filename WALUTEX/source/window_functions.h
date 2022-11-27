@@ -21,12 +21,13 @@ void CreateMainControls(HWND);
 void CreateListData();
 void UpdateListData();
 void CalculateCurrency();
-void SaveToFile();
+void AskForLocation(HWND);
+void SaveToFile(HWND);
 
 struct currenciesStruct
 {
-	double Bid;
-	double Ask;
+	float Bid;
+	float Ask;
 	const wchar_t* code;
 	const wchar_t* name;
 };

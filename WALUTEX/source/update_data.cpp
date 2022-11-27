@@ -46,10 +46,10 @@ int updateArray(std::string jsonInput)
         if (v.first == "Rate" && v.second.get("Code", "") != "XDR")
         {
             std::string val1 = v.second.get("Bid", "");
-            currenciesData[counter].Bid = std::stod(val1);
+            currenciesData[counter].Bid = std::stof(val1);
 
             std::string val2 = v.second.get("Ask", "");
-            currenciesData[counter].Ask = std::stod(val2);
+            currenciesData[counter].Ask = std::stof(val2);
         }
         counter++;
     }

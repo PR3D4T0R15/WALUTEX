@@ -37,6 +37,14 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT messages, WPARAM wparam, LPARAM
 			UpdateListData();
 			break;
 
+		case converterConvertButton:
+			CalculateCurrency();
+			break;
+
+		case hmenu_saveButton:
+			AskForLocation(hwnd);
+			break;
+
 		default:
 			break;
 		}

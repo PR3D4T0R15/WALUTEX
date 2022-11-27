@@ -1,78 +1,58 @@
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-
 #include "update_data.h"
-#include <WinSock2.h>
-#include <Windows.h>
-#include <string>
-#pragma comment(lib, "ws2_32.lib")
+
+static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp)
+{
+    ((std::string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
 
 int getDataFromServer()
 {
-	short PORT = 80;
-	const char hostName[] = "api.nbp.pl";
+    CURL* curl;
+    CURLcode res;
+    std::string buffer;
 
-	//init winsock
-	WSAData wsadata;
-	WORD DllVersion = MAKEWORD(2, 1);
-	if (WSAStartup(DllVersion, &wsadata) != 0)
-	{
-		return 2;
-	}
+    curl = curl_easy_init();
+    if (curl)
+    {
+        curl_easy_setopt(curl, CURLOPT_URL, "http://api.nbp.pl/api/exchangerates/tables/C/?format=xml");
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
 
-	//socket
-	SOCKET sockt = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockt < 0)
-	{
-		return 2;
-	}
+        res = curl_easy_perform(curl);
+    }
 
-	//server info
-	HOSTENT* host = gethostbyname(hostName);
-	if (host == nullptr)
-	{
-		return 2;
-	}
+    if (!updateArray(buffer))
+    {
+        return 1;
+    }
 
-	SOCKADDR_IN sin;
-	ZeroMemory(&sin, sizeof(sin));
-	sin.sin_port = htons(PORT);
-	sin.sin_family = AF_INET;
-	memcpy(&sin.sin_addr.S_un.S_addr, host->h_addr_list[0], sizeof(sin.sin_addr.S_un.S_addr));
+    return 0;
+}
 
-	//connect
-	if (connect(sockt, (const sockaddr *)&sin, sizeof(sin)) != 0)
-	{
-		return 2;
-	}
+int updateArray(std::string jsonInput)
+{
+    std::stringstream sstream;
+    sstream << jsonInput;
 
-	const char message[] = "GET /api/exchangerates/tables/C/?format=xml HTTP/1.1\r\n"
-    "Host: api.nbp.pl\r\n"
-    "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)\r\n"
-    "Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8\r\n"
-    "Accept-Language: en-us,en;q=0.5\r\n"
-    "Accept-Encoding: gzip,deflate\r\n"
-    "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n"
-    "Keep-Alive: 300\r\n"
-    "Connection: keep-alive\r\n"
-    "Pragma: no-cache\r\n"
-		"Cache-Control: no-cache\r\n\r\n";
-	if (!send(sockt, message, strlen(message), 0))
-	{
-		return 2;
-	}
+    boost::property_tree::ptree xmldata;
+    boost::property_tree::read_xml(sstream, xmldata);
 
-	char Buffer[4096];
-	char BufferTemp[4096];
-	std::string output;
+    auto child = xmldata.get_child("ArrayOfExchangeRatesTable.ExchangeRatesTable.Rates");
+    
+    int counter = 0;
+    BOOST_FOREACH(boost::property_tree::ptree::value_type & v, xmldata.get_child("ArrayOfExchangeRatesTable.ExchangeRatesTable.Rates"))
+    {
+        if (v.first == "Rate" && v.second.get("Code", "") != "XDR")
+        {
+            std::string val1 = v.second.get("Bid", "");
+            currenciesData[counter].Bid = std::stod(val1);
 
-	//while (recv(sockt, BufferTemp, 4096, 0))
-	//{
-	//	//strcat(Buffer, BufferTemp);
-	//	output = BufferTemp;
-	//}
+            std::string val2 = v.second.get("Ask", "");
+            currenciesData[counter].Ask = std::stod(val2);
+        }
+        counter++;
+    }
 
-	recv(sockt, BufferTemp, 4096, 0);
-
-	closesocket(sockt);
+    return 0;
 }

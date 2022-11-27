@@ -1,10 +1,11 @@
 #pragma once
-
-//boost for JSON
-#include "boost/property_tree/ptree.hpp"
-#include "boost/property_tree/json_parser.hpp"
-
-//TODO: http request
-//TODO: json parser
+#include "curl/curl.h"
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/foreach.hpp>
+#include <string>
+#include <iostream>
+#include "window_functions.h"
 
 int getDataFromServer();
+int updateArray(std::string);

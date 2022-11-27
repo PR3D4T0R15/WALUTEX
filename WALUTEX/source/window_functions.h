@@ -1,9 +1,9 @@
 #pragma once
 
 //buttons
-#define hmenu_exitButton 001
-#define hmenu_saveButton 002
-#define hmenu_aboutButton 003
+#define hmenu_saveButton 001
+#define hmenu_aboutButton 002
+#define hmenu_updateData 003
 
 #define converterBaseCurrencyCombobox 1001
 #define converterBaseCurrencyField 1002
@@ -16,9 +16,12 @@
 //list
 #define listWindow 2000
 
+void ChangeFlag();
 void CreateMainControls(HWND);
 void CreateListData();
-void ChangeFlag();
+void UpdateListData();
+void CalculateCurrency();
+void SaveToFile();
 
 struct currenciesStruct
 {
@@ -27,3 +30,5 @@ struct currenciesStruct
 	const wchar_t* code;
 	const wchar_t* name;
 };
+
+extern currenciesStruct currenciesData[13];

@@ -19,7 +19,6 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT messages, WPARAM wparam, LPARAM
 		CreateMainControls(hwnd);
 		CreateListData();
 		ChangeFlag();
-		getDataFromServer();
 		break;
 
 	case WM_COMMAND:
@@ -28,6 +27,16 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT messages, WPARAM wparam, LPARAM
 		case CBN_SELCHANGE:
 			ChangeFlag();
 			break;
+		default:
+			break;
+		}
+		switch (wparam)
+		{
+		case hmenu_updateData:
+			getDataFromServer();
+			UpdateListData();
+			break;
+
 		default:
 			break;
 		}

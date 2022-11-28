@@ -41,8 +41,8 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT messages, WPARAM wparam, LPARAM
 			CalculateCurrency();
 			break;
 
-		case hmenu_saveButton:
-			AskForLocation(hwnd);
+		case hmenu_aboutButton:
+			MessageBoxEx(NULL, L"Designed by Mateusz Mang", L"INFORMACJA", MB_ICONINFORMATION, 0);
 			break;
 
 		default:

@@ -30,7 +30,6 @@ void CreateMainControls(HWND hwnd)
 
 	//hmenu setup
 	AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hMenu1, L"Plik");
-		AppendMenu(hMenu1, MF_STRING, hmenu_saveButton, L"Zapisz do pliku");
 		AppendMenu(hMenu1, MF_STRING, hmenu_updateData, L"Aktualizuj kurs");
 	AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hMenu2, L"Pomoc");
 		AppendMenu(hMenu2, MF_STRING, hmenu_aboutButton, L"O programie");
@@ -169,25 +168,4 @@ void CalculateCurrency()
 
 	swprintf(buffer, 10, L"%f", out);
 	SetWindowText(convertedCurrencyAmount, buffer);
-}
-
-void AskForLocation(HWND hwnd)
-{
-	OPENFILENAME ofn;
-	char fileName[100] = "";
-
-	ZeroMemory(&ofn, sizeof(ofn));
-
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = hwnd;
-	ofn.lpstrFilter = L"Text Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0";
-	ofn.lpstrFile = (LPWSTR)fileName;
-	ofn.nMaxFile = MAX_PATH;
-	ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-	ofn.lpstrDefExt = L"txt";
-
-	if (GetSaveFileName(&ofn))
-	{
-		// Do something usefull with the filename stored in szFileName 
-	}
 }

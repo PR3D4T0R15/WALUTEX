@@ -1,7 +1,6 @@
 #pragma once
 
 //buttons
-#define hmenu_saveButton 001
 #define hmenu_aboutButton 002
 #define hmenu_updateData 003
 
@@ -21,8 +20,6 @@ void CreateMainControls(HWND);
 void CreateListData();
 void UpdateListData();
 void CalculateCurrency();
-void AskForLocation(HWND);
-void SaveToFile(HWND);
 
 struct currenciesStruct
 {

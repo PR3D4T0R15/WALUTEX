@@ -16,11 +16,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
 	window.cbWndExtra = 0;
 	window.hInstance = hInst;
 	window.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_ICON1));
+	window.hIconSm = LoadIcon(hInst, MAKEINTRESOURCE(IDI_ICON1));
 	window.hCursor = LoadCursor(NULL, IDC_ARROW);
 	window.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);	
 	window.lpszMenuName = NULL;	
 	window.lpszClassName = L"window";
-	window.hIconSm = LoadIcon(hInst, MAKEINTRESOURCE(IDI_ICON1));
+	
 
 	if (!RegisterClassEx(&window))
 	{
